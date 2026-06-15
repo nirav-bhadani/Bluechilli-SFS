@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none" role="img" aria-label="B2B logistics delivery truck">
+  <defs>
+    <linearGradient id="ld-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f8f9"/>
+      <stop offset="1" stop-color="#e7ebee"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#ld-bg)"/>
+  <circle cx="640" cy="160" r="150" fill="#e50019" opacity="0.05"/>
+  <g stroke="#22262a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- road -->
+    <line x1="60" y1="470" x2="740" y2="470" opacity="0.9"/>
+    <line x1="120" y1="510" x2="200" y2="510" stroke-width="6" opacity="0.4"/>
+    <line x1="260" y1="510" x2="340" y2="510" stroke-width="6" opacity="0.4"/>
+    <!-- trailer box -->
+    <rect x="130" y="220" width="340" height="180" rx="6" fill="#ffffff"/>
+    <!-- cab -->
+    <path d="M470 280 L560 280 L620 350 L620 400 L470 400 Z" fill="#e50019" stroke="#e50019"/>
+    <!-- cab window -->
+    <path d="M495 300 L555 300 L595 348 L495 348 Z" fill="#ffffff" stroke="#22262a" stroke-width="5"/>
+  </g>
+  <g stroke="#22262a" stroke-width="7">
+    <!-- wheels -->
+    <circle cx="240" cy="400" r="42" fill="#f7f8f9"/>
+    <circle cx="240" cy="400" r="14" fill="#22262a"/>
+    <circle cx="560" cy="400" r="42" fill="#f7f8f9"/>
+    <circle cx="560" cy="400" r="14" fill="#22262a"/>
+  </g>
+</svg>

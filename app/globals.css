@@ -1,0 +1,327 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #e50019;
+  --secondary-color: #22262a;
+  --text-color: #696969;
+  --white-color: #ffffff;
+  --bg-grey-color: #383838;
+
+  /* Channel forms so Tailwind opacity modifiers (e.g. secondary/20) work. */
+  --primary-rgb: 229 0 25;
+  --secondary-rgb: 34 38 42;
+  --text-rgb: 105 105 105;
+  --bg-grey-rgb: 56 56 56;
+
+  /* Soft neutral surfaces for the redesign. */
+  --surface: #ffffff;
+  --surface-muted: #f7f8f9;
+  --surface-sunken: #f1f3f4;
+  --hairline: rgba(16, 24, 40, 0.08);
+
+  /* Slightly stronger borders for form controls so they read crisp/premium. */
+  --field-border: rgba(16, 24, 40, 0.16);
+  --field-border-hover: rgba(16, 24, 40, 0.32);
+}
+
+@layer base {
+  html {
+    /* Hard 16px base - the floor for every text size. */
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    color: var(--text-color);
+    background: var(--surface);
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 1rem; /* 16px */
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading), system-ui, sans-serif;
+    color: var(--secondary-color);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 1rem; /* never below 16px */
+  }
+
+  /* Kill number-input spinner arrows everywhere (defensive - the chat field is
+     a textarea, but this guarantees no stray spinners leak into any input). */
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Slim, unobtrusive scrollbar for the chat field once it passes its cap. */
+  textarea::-webkit-scrollbar {
+    width: 10px;
+  }
+  textarea::-webkit-scrollbar-thumb {
+    background: rgb(var(--secondary-rgb) / 0.18);
+    border: 3px solid transparent;
+    border-radius: 9999px;
+    background-clip: padding-box;
+  }
+  textarea::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--secondary-rgb) / 0.3);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
+  textarea::-webkit-scrollbar-button {
+    display: none;
+    height: 0;
+    width: 0;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  ::selection {
+    background: rgb(var(--primary-rgb) / 0.16);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+  .container-content {
+    /* Responsive gutters: tight on small/mini screens, 2rem from lg up. The
+       max-width keeps the inner content area at 1170px on large screens. */
+    @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply mx-auto w-full max-w-wide px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section rhythm - consistent vertical spacing across the page. Capped at
+     60px on tablets/mini screens (≤991px), full rhythm from 992px up. */
+  .section {
+    @apply py-[60px] min-[992px]:py-28;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 font-heading text-sm font-semibold uppercase tracking-[0.14em] text-primary;
+  }
+
+  /* CTA buttons: square corners, no lift on hover, animated draw-border. */
+  .btn-primary {
+    @apply relative inline-flex h-12 items-center justify-center gap-2 overflow-visible rounded-none bg-primary px-6 font-heading text-base font-semibold text-white shadow-soft transition-colors duration-200 ease-smooth hover:bg-[#c40016] disabled:cursor-not-allowed disabled:opacity-50;
+    --draw-color: #ffffff;
+  }
+
+  .btn-ghost {
+    @apply relative inline-flex h-12 items-center justify-center gap-2 overflow-visible rounded-none border border-[color:var(--hairline)] bg-white px-6 font-heading text-base font-semibold text-secondary transition-colors duration-200 ease-smooth hover:border-primary/30;
+    --draw-color: var(--primary-color);
+  }
+
+  /* Bordered "line" CTA used for phone pills on dark surfaces. */
+  .btn-line {
+    @apply relative inline-flex h-12 items-center justify-center gap-2 overflow-visible rounded-none border border-white/25 px-6 font-heading text-base font-semibold text-white transition-colors duration-200 ease-smooth hover:border-white/40;
+    --draw-color: #ffffff;
+  }
+
+  /* Two pseudo-elements draw a border continuously around the rectangle on
+     hover: ::before traces top → right, ::after traces bottom → left. They are
+     hidden at rest (opacity:0, so no corner dots) and the animation lives only
+     on the hover/focus state - at rest there is no transition, so leaving the
+     button snaps everything off instantly instead of un-drawing in reverse. */
+  .btn-primary::before,
+  .btn-primary::after,
+  .btn-ghost::before,
+  .btn-ghost::after,
+  .btn-line::before,
+  .btn-line::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+  .btn-primary::before,
+  .btn-ghost::before,
+  .btn-line::before {
+    top: 0;
+    left: 0;
+    border-top: 2px solid var(--draw-color);
+    border-right: 2px solid var(--draw-color);
+  }
+  .btn-primary::after,
+  .btn-ghost::after,
+  .btn-line::after {
+    right: 0;
+    bottom: 0;
+    border-bottom: 2px solid var(--draw-color);
+    border-left: 2px solid var(--draw-color);
+  }
+  .btn-primary:hover::before,
+  .btn-ghost:hover::before,
+  .btn-line:hover::before,
+  .btn-primary:focus-visible::before,
+  .btn-ghost:focus-visible::before,
+  .btn-line:focus-visible::before {
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+    transition:
+      width 0.15s linear,
+      height 0.15s linear 0.15s;
+  }
+  .btn-primary:hover::after,
+  .btn-ghost:hover::after,
+  .btn-line:hover::after,
+  .btn-primary:focus-visible::after,
+  .btn-ghost:focus-visible::after,
+  .btn-line:focus-visible::after {
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+    transition:
+      opacity 0s linear 0.3s,
+      width 0.15s linear 0.3s,
+      height 0.15s linear 0.45s;
+  }
+
+  /* Crisp, square keyboard focus ring (the rounded global ring would look off
+     against the now square buttons). */
+  .btn-primary:focus-visible,
+  .btn-ghost:focus-visible,
+  .btn-line:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 3px;
+    border-radius: 0;
+  }
+
+  .card {
+    @apply rounded-2xl border border-[color:var(--hairline)] bg-white shadow-soft;
+  }
+
+  /* Premium, crisp form control - square corners to match the CTAs, a refined
+     border, and a clean primary focus ring. */
+  .field {
+    @apply w-full rounded-none border border-[color:var(--field-border)] bg-white px-4 py-3.5 text-base text-secondary outline-none transition-all duration-200 placeholder:text-body/55 hover:border-[color:var(--field-border-hover)] focus:border-primary focus:shadow-focus;
+  }
+
+  /* Select variant: hide the native arrow and draw a custom chevron. */
+  .field-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 2.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322262a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.1rem;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-[color:var(--hairline)] bg-white px-4 py-2.5 text-base font-medium text-secondary shadow-soft transition-all duration-200 ease-smooth hover:-translate-y-0.5 hover:border-primary/35 hover:text-primary hover:shadow-card;
+  }
+
+  /* Markdown styling for assistant replies (all ≥16px). */
+  .markdown-body p {
+    @apply mb-3 text-base leading-relaxed last:mb-0;
+  }
+  .markdown-body a {
+    @apply font-semibold text-primary underline underline-offset-2;
+  }
+  .markdown-body strong {
+    @apply font-semibold text-secondary;
+  }
+  .markdown-body ul {
+    @apply mb-3 list-disc space-y-1.5 pl-5 text-base last:mb-0;
+  }
+  .markdown-body ol {
+    @apply mb-3 list-decimal space-y-1.5 pl-5 text-base last:mb-0;
+  }
+  .markdown-body code {
+    @apply rounded-md bg-black/5 px-1.5 py-0.5 font-mono text-base;
+  }
+}
+
+/* Testimonials Swiper - brand the dots (default theme is iOS blue). */
+.testimonials-swiper .swiper-pagination-bullet {
+  background: var(--secondary-color);
+  opacity: 0.2;
+  transition:
+    opacity 0.2s ease,
+    background 0.2s ease;
+}
+.testimonials-swiper .swiper-pagination-bullet-active {
+  background: var(--primary-color);
+  opacity: 1;
+}
+
+@layer utilities {
+  /* Scroll-reveal - paired with components/Reveal.tsx (IntersectionObserver). */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

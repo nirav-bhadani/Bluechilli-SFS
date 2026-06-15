@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"D:\\\\SFS Dedicated\" && mkdir -p \"app/[slug]\" && echo done)"
+    ],
+    "additionalDirectories": [
+      "d:\\SFS Dedicated\\app"
+    ]
+  }
+}
