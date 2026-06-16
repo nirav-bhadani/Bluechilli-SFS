@@ -53,7 +53,7 @@ export function HeroChat() {
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-secondary/10 to-transparent"
       />
 
-      <div className="container-content relative pb-6 pt-16 sm:pt-20 md:pb-8 md:pt-24">
+      <div className="container-content relative py-[60px] min-[768px]:py-[80px] min-[1200px]:py-[100px]">
         <div className="relative mx-auto max-w-4xl">
           {/* Red speech-bubble heading */}
           <div className="relative z-20 mx-auto flex w-fit max-w-full justify-center px-2">

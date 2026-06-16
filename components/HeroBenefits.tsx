@@ -27,19 +27,22 @@ const benefits: Array<{
 export function HeroBenefits() {
   return (
     <section
-      aria-label="Why use the SFS assistant"
-      className="border-b border-[color:var(--hairline)] bg-[color:var(--surface-muted)] pb-16 pt-6 md:pb-20 md:pt-8"
+      aria-labelledby="why-sfs-heading"
+      className="section"
     >
       <div className="container-content">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="eyebrow justify-center">Why ask SFS</p>
-          <p className="mt-4 text-pretty text-lg text-body">
+          <p className="eyebrow justify-center">No forms, just answers</p>
+          <h2 id="why-sfs-heading" className="mt-4 text-3xl text-secondary md:text-4xl">
+            Why ask SFS
+          </h2>
+          <p className="mt-5 text-pretty text-lg text-body">
             Skip the contact form. Tell our AI assistant what you need - space,
             pallets, fulfilment or a specialist - and get a fast, specific answer.
           </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-3">
+        <div className="mt-14 grid gap-5 sm:grid-cols-3">
           {benefits.map(({ Icon, title, body }, i) => (
             <Reveal key={title} delay={i * 90} className="flex">
               <article className="group relative flex w-full flex-col items-start overflow-hidden rounded-[16px] border border-[color:var(--hairline)] bg-white p-7 shadow-soft transition-all duration-300 ease-smooth hover:-translate-y-1.5 hover:border-primary/25 hover:shadow-lift">

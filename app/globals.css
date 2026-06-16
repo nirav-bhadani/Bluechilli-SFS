@@ -127,9 +127,9 @@
   }
 
   /* Section rhythm - consistent vertical spacing across the page. Capped at
-     60px on tablets/mini screens (≤991px), full rhythm from 992px up. */
+     Section rhythm: 60px ≤767px, 80px ≤1199px, 100px from 1200px up. */
   .section {
-    @apply py-[60px] min-[992px]:py-28;
+    @apply py-[60px] min-[768px]:py-[80px] min-[1200px]:py-[100px];
   }
 
   .eyebrow {

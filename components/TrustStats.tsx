@@ -63,7 +63,7 @@ export function TrustStats() {
 
   return (
     <section aria-label="SFS at a glance" className="bg-secondary text-white">
-      <div ref={ref} className="container-wide py-16 md:py-20">
+      <div ref={ref} className="container-wide py-[60px] min-[768px]:py-[80px] min-[1200px]:py-[100px]">
         <div className="grid grid-cols-1 gap-x-[10px] gap-y-12 min-[481px]:grid-cols-2 min-[992px]:grid-cols-4 min-[1200px]:gap-x-8">
           {siteConfig.stats.map((stat) => (
             <Stat key={stat.label} value={stat.value} label={stat.label} inView={inView} />
