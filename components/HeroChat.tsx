@@ -33,7 +33,7 @@ export function HeroChat() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f4f6f7_100%)]"
+      className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f7f8f9_100%)]"
     >
       {/* Layered background treatment - dotted grid, brand glow + cool blob. */}
       <div
@@ -42,7 +42,7 @@ export function HeroChat() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[-18%] h-[520px] w-[900px] max-w-[130vw] -translate-x-1/2 animate-glow-pulse rounded-full bg-primary/10 blur-[140px]"
+        className="pointer-events-none absolute left-1/2 top-[-18%] h-[520px] w-[900px] max-w-[130vw] -translate-x-1/2 animate-glow-pulse rounded-full bg-secondary/10 blur-[140px]"
       />
       <div
         aria-hidden
@@ -53,7 +53,7 @@ export function HeroChat() {
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-secondary/10 to-transparent"
       />
 
-      <div className="container-content relative pb-20 pt-16 sm:pt-20 md:pb-28 md:pt-24">
+      <div className="container-content relative pb-6 pt-16 sm:pt-20 md:pb-8 md:pt-24">
         <div className="relative mx-auto max-w-4xl">
           {/* Red speech-bubble heading */}
           <div className="relative z-20 mx-auto flex w-fit max-w-full justify-center px-2">
@@ -131,7 +131,7 @@ export function HeroChat() {
             </div>
           </div>
 
-          <ConsentLine className="mx-auto mt-6 max-w-2xl text-center" />
+          <ConsentLine className="mx-auto mt-5 max-w-2xl text-center" />
         </div>
       </div>
     </section>

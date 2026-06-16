@@ -28,15 +28,9 @@ export function HeroBenefits() {
   return (
     <section
       aria-label="Why use the SFS assistant"
-      className="relative overflow-hidden border-b border-[color:var(--hairline)] bg-[color:var(--surface-muted)] py-16 md:py-20"
+      className="border-b border-[color:var(--hairline)] bg-[color:var(--surface-muted)] pb-16 pt-6 md:pb-20 md:pt-8"
     >
-      {/* Soft brand glow for depth. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[-30%] h-[420px] w-[820px] max-w-[120vw] -translate-x-1/2 rounded-full bg-primary/[0.06] blur-[130px]"
-      />
-
-      <div className="container-content relative">
+      <div className="container-content">
         <Reveal className="mx-auto max-w-2xl text-center">
           <p className="eyebrow justify-center">Why ask SFS</p>
           <p className="mt-4 text-pretty text-lg text-body">
