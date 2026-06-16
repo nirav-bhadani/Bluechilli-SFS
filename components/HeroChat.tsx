@@ -1,19 +1,23 @@
 "use client";
 
+import type { ComponentType, SVGProps } from "react";
 import { useChat } from "./chat/useChat";
 import { ChatInput } from "./chat/ChatInput";
 import { MessageList } from "./chat/MessageList";
 import { ConsentLine } from "./chat/ConsentLine";
-import { starterPrompts } from "@/lib/mockAgent";
 import type { SuggestedAction } from "@/lib/types";
-import { CheckIcon, PlusIcon, SparkIcon } from "./icons";
+import { ArchiveIcon, CartIcon, LayersIcon, PinIcon, PlusIcon } from "./icons";
 
-const HEADLINE =
-  "What storage, warehousing or fulfilment support does your business need?";
-const PLACEHOLDER =
-  'Describe your requirement, e.g. "I need 15,000 sq ft of temporary warehouse space near Birmingham."';
+type Icon = ComponentType<SVGProps<SVGSVGElement>>;
 
-const proofPoints = ["Instant, specific answers", "No contact form", "Talk to a human anytime"];
+const PLACEHOLDER = "Type a Message…";
+
+const prompts: Array<{ label: string; Icon: Icon }> = [
+  { label: "Find warehouse space near you", Icon: PinIcon },
+  { label: "Get a quote for pallet storage", Icon: LayersIcon },
+  { label: "Set up e-commerce fulfilment", Icon: CartIcon },
+  { label: "I need overflow storage for peak", Icon: ArchiveIcon },
+];
 
 export function HeroChat() {
   const chat = useChat();
@@ -50,95 +54,79 @@ export function HeroChat() {
       />
 
       <div className="container-content relative pb-20 pt-16 sm:pt-20 md:pb-28 md:pt-24">
-        <div className="mx-auto max-w-5xl text-center">
-          <span className="animate-fade-in inline-flex max-w-full items-center gap-2 whitespace-normal rounded-2xl border border-[color:var(--hairline)] bg-white/80 px-4 py-2 text-left text-base font-medium text-secondary shadow-soft backdrop-blur min-[375px]:whitespace-nowrap min-[375px]:rounded-full">
-            <SparkIcon className="h-4 w-4 shrink-0 text-primary" />
-            Innovative · Unique · Tailored solutions
-          </span>
-          <h1
-            id="hero-heading"
-            className="mt-6 text-balance text-3xl font-bold leading-[1.08] text-secondary sm:text-4xl md:text-5xl lg:text-6xl"
-          >
-            {HEADLINE}
-          </h1>
-          <p className="mx-auto mt-5 max-w-prose text-pretty text-lg text-body">
-            Skip the contact form. Tell our AI assistant what you need - space,
-            pallets, fulfilment or a specialist - and get a fast, specific answer.
-          </p>
-
-          {/* Inline proof row */}
-          <ul className="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-base font-medium text-secondary">
-            {proofPoints.map((point) => (
-              <li key={point} className="inline-flex items-center gap-2">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <CheckIcon className="h-3 w-3" />
-                </span>
-                {point}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="mx-auto mt-12 max-w-5xl">
-          {hasThread && (
-            <div className="mb-4 flex items-center justify-between">
-              <span className="text-base font-medium text-body">Your conversation</span>
-              <button
-                type="button"
-                onClick={chat.newConversation}
-                className="inline-flex items-center gap-1.5 text-base font-semibold text-primary transition-opacity hover:opacity-80"
-              >
-                <PlusIcon className="h-4 w-4" /> New conversation
-              </button>
-            </div>
-          )}
-
-          {/* The premium chat surface - soft glow + gradient hairline ring. */}
-          <div className="relative">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-3 -z-10 rounded-[34px] bg-primary/[0.08] blur-2xl"
-            />
-            <div className="animate-scale-in rounded-[28px] bg-gradient-to-b from-white/90 via-[color:var(--hairline)] to-transparent p-px shadow-lift">
-              <div className="rounded-[27px] bg-white/90 p-1.5 backdrop-blur sm:p-2">
-                {hasThread && (
-                  <div className="max-h-[46vh] overflow-y-auto px-3 py-4 sm:px-5">
-                    <MessageList
-                      messages={chat.messages}
-                      isStreaming={chat.isStreaming}
-                      error={chat.error}
-                      onRetry={chat.retry}
-                      onAction={handleAction}
-                    />
-                  </div>
-                )}
-
-                <ChatInput
-                  onSend={(text, attachments) => void chat.send(text, attachments)}
-                  onStop={chat.stop}
-                  isStreaming={chat.isStreaming}
-                  placeholder={hasThread ? "Reply…" : PLACEHOLDER}
-                  large
-                  flat
-                />
-              </div>
-            </div>
+        <div className="relative mx-auto max-w-4xl">
+          {/* Red speech-bubble heading */}
+          <div className="relative z-20 mx-auto flex w-fit max-w-full justify-center px-2">
+            <h1
+              id="hero-heading"
+              className="animate-fade-in relative rounded-[20px] bg-primary px-7 py-4 text-center text-2xl font-bold leading-tight text-white shadow-lift sm:px-10 sm:text-[1.75rem]"
+            >
+              How can I help you today?
+              <span
+                aria-hidden
+                className="absolute -bottom-2 left-1/2 h-5 w-5 -translate-x-1/2 rotate-45 rounded-[4px] bg-primary"
+              />
+            </h1>
           </div>
 
-          {!hasThread && (
-            <div className="mt-5 flex flex-wrap justify-center gap-2.5">
-              {starterPrompts.map((prompt) => (
-                <button
-                  key={prompt}
-                  type="button"
-                  onClick={() => void chat.send(prompt)}
-                  className="chip"
-                >
-                  {prompt}
-                </button>
-              ))}
+          {/* White assistant card */}
+          <div className="animate-scale-in relative z-10 -mt-4 rounded-[28px] bg-white p-5 shadow-lift sm:p-8 sm:pt-10">
+            <p className="text-center text-base text-body">
+              Ask about storage, warehousing or fulfilment - or get a quote in minutes.
+            </p>
+
+            {hasThread ? (
+              <>
+                <div className="mt-5 flex items-center justify-end">
+                  <button
+                    type="button"
+                    onClick={chat.newConversation}
+                    className="inline-flex items-center gap-1.5 text-base font-semibold text-primary transition-opacity hover:opacity-80"
+                  >
+                    <PlusIcon className="h-4 w-4" /> New conversation
+                  </button>
+                </div>
+                <div className="mt-3 max-h-[46vh] overflow-y-auto px-1 py-2">
+                  <MessageList
+                    messages={chat.messages}
+                    isStreaming={chat.isStreaming}
+                    error={chat.error}
+                    onRetry={chat.retry}
+                    onAction={handleAction}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="mt-6 grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 min-[860px]:grid-cols-4">
+                {prompts.map((p) => (
+                  <button
+                    key={p.label}
+                    type="button"
+                    onClick={() => void chat.send(p.label)}
+                    className="group flex flex-col items-center gap-5 rounded-2xl bg-[color:var(--surface-muted)] p-5 text-center transition-all duration-200 ease-smooth hover:-translate-y-0.5 hover:bg-primary/[0.04] hover:shadow-soft"
+                  >
+                    <p.Icon className="h-8 w-8 text-secondary transition-colors duration-200 group-hover:text-primary" />
+                    <span className="text-base font-medium leading-snug text-secondary">
+                      {p.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Chat input */}
+            <div className="mt-4 rounded-2xl border border-[color:var(--hairline)] bg-white transition-all duration-200 focus-within:border-primary/40">
+              <ChatInput
+                onSend={(text, attachments) => void chat.send(text, attachments)}
+                onStop={chat.stop}
+                isStreaming={chat.isStreaming}
+                placeholder={hasThread ? "Reply…" : PLACEHOLDER}
+                large
+                flat
+                stacked
+              />
             </div>
-          )}
+          </div>
 
           <ConsentLine className="mx-auto mt-6 max-w-2xl text-center" />
         </div>

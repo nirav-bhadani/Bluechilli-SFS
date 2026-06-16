@@ -9,8 +9,7 @@ import { ConsentLine } from "./chat/ConsentLine";
 import { siteConfig } from "@/lib/siteConfig";
 import type { Conversation, SuggestedAction } from "@/lib/types";
 import {
-  ArrowRightIcon,
-  BuildingIcon,
+  ArchiveIcon,
   CartIcon,
   CloseIcon,
   LayersIcon,
@@ -130,12 +129,17 @@ export default function FullScreenAssistant({ onClose }: { onClose: () => void }
 
         <div className="border-t border-black/10 bg-white px-4 py-3">
           <div className="mx-auto w-full max-w-5xl">
-            <ChatInput
-              onSend={(text, attachments) => void chat.send(text, attachments)}
-              onStop={chat.stop}
-              isStreaming={chat.isStreaming}
-              placeholder="Type a message…"
-            />
+            <div className="rounded-2xl border border-[color:var(--hairline)] bg-white transition-all duration-200 focus-within:border-primary/40">
+              <ChatInput
+                onSend={(text, attachments) => void chat.send(text, attachments)}
+                onStop={chat.stop}
+                isStreaming={chat.isStreaming}
+                placeholder="Type a Message…"
+                large
+                flat
+                stacked
+              />
+            </div>
             <ConsentLine className="mt-2 text-center" />
           </div>
         </div>
@@ -226,65 +230,41 @@ function Sidebar({
 function EmptyState({ onPrompt }: { onPrompt: (prompt: string) => void }) {
   const prompts: Array<{
     label: string;
-    hint: string;
     Icon: ComponentType<SVGProps<SVGSVGElement>>;
   }> = [
-    {
-      label: "Find warehouse space near Birmingham",
-      hint: "Shared or dedicated storage",
-      Icon: PinIcon,
-    },
-    {
-      label: "Get a quote for pallet storage",
-      hint: "Pay-as-you-use pricing",
-      Icon: LayersIcon,
-    },
-    {
-      label: "Set up e-commerce fulfilment",
-      hint: "Pick, pack & dispatch",
-      Icon: CartIcon,
-    },
-    {
-      label: "I need overflow storage for peak",
-      hint: "Flexible seasonal capacity",
-      Icon: BuildingIcon,
-    },
+    { label: "Find warehouse space near you", Icon: PinIcon },
+    { label: "Get a quote for pallet storage", Icon: LayersIcon },
+    { label: "Set up e-commerce fulfilment", Icon: CartIcon },
+    { label: "I need overflow storage for peak", Icon: ArchiveIcon },
   ];
 
   return (
-    <div className="flex min-h-[50vh] flex-col items-center justify-center text-center">
-      <div className="flex h-16 items-center justify-center rounded-2xl border border-[color:var(--hairline)] bg-white px-6 shadow-soft">
-        <Image
-          src="/sfs-logo-dark.svg"
-          alt={siteConfig.legalName}
-          width={140}
-          height={41}
-          className="h-9 w-auto"
-        />
+    <div className="mx-auto flex min-h-[50vh] max-w-4xl flex-col items-center justify-center">
+      {/* Red speech-bubble heading */}
+      <div className="relative z-20 flex w-fit max-w-full justify-center px-2">
+        <h2 className="relative rounded-[20px] bg-primary px-7 py-4 text-center text-2xl font-bold leading-tight text-white shadow-lift sm:px-10 sm:text-[1.75rem]">
+          How can I help you today?
+          <span
+            aria-hidden
+            className="absolute -bottom-2 left-1/2 h-5 w-5 -translate-x-1/2 rotate-45 rounded-[4px] bg-primary"
+          />
+        </h2>
       </div>
-      <h2 className="mt-6 text-2xl font-bold text-secondary">How can I help you today?</h2>
-      <p className="mt-2 max-w-md text-body">
+
+      <p className="mt-7 text-center text-base text-body">
         Ask about storage, warehousing or fulfilment - or get a quote in minutes.
       </p>
 
-      <div className="mt-8 grid w-full max-w-5xl gap-3 sm:grid-cols-2">
-        {prompts.map(({ label, hint, Icon }) => (
+      <div className="mt-8 grid w-full grid-cols-1 gap-3 min-[480px]:grid-cols-2 min-[860px]:grid-cols-4">
+        {prompts.map(({ label, Icon }) => (
           <button
             key={label}
             type="button"
             onClick={() => onPrompt(label)}
-            className="group flex items-center gap-4 rounded-2xl border border-[color:var(--hairline)] bg-white p-4 text-left shadow-soft transition-all duration-200 ease-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-card"
+            className="group flex flex-col items-center gap-5 rounded-2xl bg-[color:var(--surface-muted)] p-5 text-center transition-all duration-200 ease-smooth hover:-translate-y-0.5 hover:bg-primary/[0.04] hover:shadow-soft"
           >
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/[0.08] text-primary transition-colors duration-200 group-hover:bg-primary group-hover:text-white">
-              <Icon className="h-5 w-5" />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-base font-semibold text-secondary transition-colors group-hover:text-primary">
-                {label}
-              </span>
-              <span className="mt-0.5 block text-sm text-body">{hint}</span>
-            </span>
-            <ArrowRightIcon className="h-4 w-4 shrink-0 text-body/40 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-primary" />
+            <Icon className="h-8 w-8 text-secondary transition-colors duration-200 group-hover:text-primary" />
+            <span className="text-base font-medium leading-snug text-secondary">{label}</span>
           </button>
         ))}
       </div>

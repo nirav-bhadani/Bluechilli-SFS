@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { HeroChat } from "@/components/HeroChat";
+import { HeroBenefits } from "@/components/HeroBenefits";
 import { TrustStats } from "@/components/TrustStats";
 import { Services } from "@/components/Services";
 import { Values } from "@/components/Values";
@@ -15,6 +16,7 @@ export default function HomePage() {
       <Header />
       <main>
         <HeroChat />
+        <HeroBenefits />
         <TrustStats />
         <Services />
         <Values />
