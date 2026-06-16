@@ -86,7 +86,10 @@ export function HeroChat() {
                     <PlusIcon className="h-4 w-4" /> New conversation
                   </button>
                 </div>
-                <div className="mt-3 max-h-[46vh] overflow-y-auto px-1 py-2">
+                <div
+                  data-lenis-prevent
+                  className="mt-3 max-h-[46vh] overflow-y-auto overscroll-contain px-1 py-2"
+                >
                   <MessageList
                     messages={chat.messages}
                     isStreaming={chat.isStreaming}

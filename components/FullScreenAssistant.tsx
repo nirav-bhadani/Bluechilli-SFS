@@ -111,7 +111,7 @@ export default function FullScreenAssistant({ onClose }: { onClose: () => void }
           </button>
         </header>
 
-        <div className="flex-1 overflow-y-auto">
+        <div data-lenis-prevent className="flex-1 overflow-y-auto overscroll-contain">
           <div className="mx-auto w-full max-w-5xl px-4 py-6">
             {hasThread ? (
               <MessageList
@@ -189,7 +189,11 @@ function Sidebar({
         Recent
       </p>
 
-      <nav aria-label="Recent conversations" className="flex-1 overflow-y-auto px-2 pb-4">
+      <nav
+        aria-label="Recent conversations"
+        data-lenis-prevent
+        className="flex-1 overflow-y-auto overscroll-contain px-2 pb-4"
+      >
         {conversations.length === 0 ? (
           <p className="px-3 py-2 text-sm text-white/40">No chats yet</p>
         ) : (
