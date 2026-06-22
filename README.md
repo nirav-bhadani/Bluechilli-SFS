@@ -48,14 +48,15 @@ once the real backend is live.
 ## Real AI (prototype path)
 
 A secure Next.js API route at [`app/api/chat/route.ts`](app/api/chat/route.ts)
-calls the Claude API server-side, so **the API key is never exposed to the
+calls OpenRouter server-side, so **the API key is never exposed to the
 browser**. To enable it:
 
 ```bash
 # .env.local
 NEXT_PUBLIC_USE_REAL_AI=true
-ANTHROPIC_API_KEY=sk-ant-...
-ANTHROPIC_MODEL=claude-opus-4-8   # optional
+OPENROUTER_API_KEY=sk-or-v1-...
+OPENROUTER_MODEL=deepseek/deepseek-v4-flash   # optional; cheap demo default
+# OPENROUTER_MODEL=openai/gpt-5.4-mini        # alternative
 ```
 
 With `NEXT_PUBLIC_USE_REAL_AI=false` (default) the adapter uses the mock agent.
