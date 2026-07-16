@@ -24,6 +24,15 @@
   /* Slightly stronger borders for form controls so they read crisp/premium. */
   --field-border: rgba(16, 24, 40, 0.16);
   --field-border-hover: rgba(16, 24, 40, 0.32);
+
+  /* SFS Figma design tokens (Section 2.0) — homepage rebuild. */
+  --sfs-red: #e50019;
+  --sfs-red-deep: #b70014;
+  --sfs-red-80: rgba(229, 0, 25, 0.8);
+  --sfs-red-60: rgba(229, 0, 25, 0.6);
+  --sfs-grey-panel: #f0f0f0;
+  --sfs-grey-num: #e8e8e8;
+  --sfs-border: #e4e4e4;
 }
 
 @layer base {
@@ -95,6 +104,36 @@
     background-clip: padding-box;
   }
   textarea::-webkit-scrollbar-button {
+    display: none;
+    height: 0;
+    width: 0;
+  }
+
+  /* Slim, on-brand scrollbar for the hero chat conversation area — replaces the
+     chunky default (grey thumb + up/down arrow buttons) with a rounded red thumb
+     on a transparent track. */
+  .chat-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--primary-rgb) / 0.32) transparent;
+  }
+  .chat-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+  .chat-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .chat-scroll::-webkit-scrollbar-thumb {
+    background: rgb(var(--primary-rgb) / 0.3);
+    border: 2px solid transparent;
+    border-radius: 9999px;
+    background-clip: padding-box;
+  }
+  .chat-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--primary-rgb) / 0.5);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  .chat-scroll::-webkit-scrollbar-button {
     display: none;
     height: 0;
     width: 0;
@@ -306,6 +345,52 @@
   }
   .text-pretty {
     text-wrap: pretty;
+  }
+
+  /* Hero suggestion-chip marquee (Animation spec 9): a seamless auto-scroll of
+     two chip copies with faded edges, pausing on hover (handled in markup). */
+  .hero-chip-mask {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 6%,
+      #000 94%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 6%,
+      #000 94%,
+      transparent
+    );
+  }
+  .hero-chip-track {
+    animation: hero-chip-marquee 34s linear infinite;
+    will-change: transform;
+  }
+  @keyframes hero-chip-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No marquee — let the chips be scrolled manually instead. */
+  .hero-chip-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  .hero-chip-mask {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .hero-chip-mask::-webkit-scrollbar {
+    display: none;
   }
 }
 

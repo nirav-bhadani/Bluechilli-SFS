@@ -22,24 +22,21 @@ const body = Open_Sans({
   fallback: ["system-ui", "Segoe UI", "Arial", "sans-serif"],
 });
 
+// Homepage meta from the SFS Homepage Content document.
+const HOME_TITLE =
+  "SFS | Commercial Storage, Warehousing & Fulfilment Solutions";
+const HOME_DESCRIPTION =
+  "Need more warehouse space? SFS provides flexible commercial storage, dedicated warehouse space and fulfilment solutions that scale up as your business grows.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.legalName} | UK Warehousing & Fulfilment`,
+    default: HOME_TITLE,
     template: `%s | ${siteConfig.name}`,
   },
-  description: siteConfig.description,
+  description: HOME_DESCRIPTION,
   applicationName: siteConfig.legalName,
-  keywords: [
-    "warehousing UK",
-    "fulfilment services",
-    "pallet storage",
-    "e-commerce fulfilment",
-    "3PL Burntwood",
-    "B2B logistics",
-    "co-packing",
-    "reverse logistics",
-  ],
+  keywords: ["commercial storage", "warehouse storage", "fulfilment"],
   alternates: {
     canonical: "/",
   },
@@ -48,14 +45,14 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: siteConfig.url,
     siteName: siteConfig.legalName,
-    title: `${siteConfig.legalName} | UK Warehousing & Fulfilment`,
-    description: siteConfig.description,
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     images: [{ url: "/sfs-logo.svg", alt: `${siteConfig.legalName} logo` }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.legalName} | UK Warehousing & Fulfilment`,
-    description: siteConfig.description,
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     images: ["/sfs-logo.svg"],
   },
   robots: {

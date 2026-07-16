@@ -28,6 +28,17 @@ const config: Config = {
         body: "rgb(var(--text-rgb) / <alpha-value>)",
         "bg-grey": "rgb(var(--bg-grey-rgb) / <alpha-value>)",
         ink: "rgb(var(--secondary-rgb) / <alpha-value>)",
+        // SFS Figma design tokens (Section 2.0) — the homepage rebuild palette.
+        sfs: {
+          red: "#e50019",
+          "red-deep": "#b70014",
+          "red-80": "rgba(229,0,25,0.8)",
+          "red-60": "rgba(229,0,25,0.6)",
+          panel: "#f0f0f0",
+          num: "#e8e8e8",
+          border: "#e4e4e4",
+          black: "#000000",
+        },
       },
       fontFamily: {
         heading: ["var(--font-heading)", "system-ui", "sans-serif"],
@@ -43,12 +54,21 @@ const config: Config = {
         xl: "0.875rem",
         "2xl": "1.25rem",
         "3xl": "1.75rem",
+        // Figma radii tokens (Section 2.0): panels 10, cards/buttons 8, steps 4.
+        "sfs-panel": "10px",
+        "sfs-card": "8px",
+        "sfs-step": "4px",
       },
       boxShadow: {
         soft: "0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06)",
         card: "0 4px 14px -4px rgba(16,24,40,0.08), 0 2px 6px -2px rgba(16,24,40,0.05)",
         lift: "0 22px 48px -16px rgba(16,24,40,0.20), 0 8px 16px -8px rgba(16,24,40,0.10)",
         focus: "0 0 0 4px rgba(229,0,25,0.14)",
+        // SFS Figma shadows (Section 2.0).
+        "sfs-glow": "0px 20px 50px rgba(229,0,25,0.3)",
+        "sfs-red-soft": "0px 20px 50px rgba(229,0,25,0.15)",
+        "sfs-neutral": "0px 20px 50px rgba(0,0,0,0.15)",
+        "sfs-chat": "0px 10px 20px rgba(229,0,25,0.15)",
       },
       transitionTimingFunction: {
         smooth: "cubic-bezier(0.22, 1, 0.36, 1)",
