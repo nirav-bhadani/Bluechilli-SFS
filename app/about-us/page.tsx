@@ -53,7 +53,6 @@ const ABOUT_SLIDES: AboutSlide[] = [
       </>
     ),
     lead: "Everything we do starts with understanding our customers’ business.",
-    socials: true,
     body: (
       <>
         <p>

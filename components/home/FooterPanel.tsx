@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/siteConfig";
 import { RevealGroup } from "./Reveal";
+import { Socials } from "@/components/Socials";
 
 // Section 2.9 — Footer (Figma node 149:219). A red rounded panel (inset 30px)
 // with the logo + three columns (Quick Links / Offices / Contact Us), then a
@@ -26,7 +27,7 @@ export function FooterPanel() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-white px-4 pb-6 pt-[30px] min-[768px]:px-[30px]">
+    <footer className="bg-white px-4 pb-6 pt-[30px] min-[768px]:px-[30px] max-[991px]:pb-[90px]">
       {/* Red panel */}
       <div className="mx-auto max-w-[1860px] rounded-[10px] bg-sfs-red">
         <RevealGroup
@@ -92,7 +93,7 @@ export function FooterPanel() {
       </div>
 
       {/* Bottom strip */}
-      <div className="mx-auto flex max-w-[90vw] min-[1400px]:max-w-[1320px] min-[1600px]:max-w-[1548px] flex-col items-center gap-3 px-0 pb-[10px] pt-[40px] text-center font-body text-[16px] leading-[1.6] text-black max-[480px]:text-[15px] min-[1024px]:flex-row min-[1024px]:items-center min-[1024px]:justify-between min-[1024px]:px-0 min-[1024px]:text-left">
+      <div className="mx-auto flex max-w-[90vw] min-[1400px]:max-w-[1320px] min-[1600px]:max-w-[1548px] flex-col items-center gap-3 px-0 pb-[10px] pt-[40px] text-center font-body text-[16px] leading-[1.6] text-black max-[480px]:text-[15px] min-[1300px]:flex-row min-[1300px]:items-center min-[1300px]:justify-between min-[1300px]:px-0 min-[1300px]:text-left">
         <p>
           Copyright © {year} SFS - All Rights Reserved | Site by{" "}
           <a
@@ -104,19 +105,29 @@ export function FooterPanel() {
             Bluechilli
           </a>
         </p>
-        <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 min-[1024px]:justify-start">
-          {legalLinks.map((link, i) => (
-            <Fragment key={link.label}>
-              {i > 0 && <span aria-hidden className="text-black/40">|</span>}
-              <Link
-                href={link.href}
-                className="transition-colors duration-200 hover:text-sfs-red"
-              >
-                {link.label}
-              </Link>
-            </Fragment>
-          ))}
-        </nav>
+
+        {/* Second row (≤1299px) / right side (≥1300px): legal links then socials,
+            40px apart, side by side once there's room (≥640px). In the ≥1300px
+            row layout the container edge reaches the floating "Ask SFS" button
+            below ~1850px, so shift this group left to keep the socials clear. */}
+        <div className="flex flex-col items-center gap-3 min-[640px]:flex-row min-[640px]:items-center min-[640px]:gap-[40px] min-[1300px]:max-[1849px]:mr-[160px]">
+          <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 min-[1024px]:justify-start">
+            {legalLinks.map((link, i) => (
+              <Fragment key={link.label}>
+                {i > 0 && <span aria-hidden className="text-black/40">|</span>}
+                <Link
+                  href={link.href}
+                  className="transition-colors duration-200 hover:text-sfs-red"
+                >
+                  {link.label}
+                </Link>
+              </Fragment>
+            ))}
+          </nav>
+
+          {/* Brand socials — moved here from the About slider. */}
+          <Socials />
+        </div>
       </div>
     </footer>
   );
