@@ -17,7 +17,7 @@ const heading = Familjen_Grotesk({
 const body = Open_Sans({
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-body",
   fallback: ["system-ui", "Segoe UI", "Arial", "sans-serif"],
 });

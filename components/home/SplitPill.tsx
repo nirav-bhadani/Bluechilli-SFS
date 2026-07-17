@@ -24,6 +24,7 @@ export function SplitPill({
   onClick,
   type = "button",
   className = "",
+  iconClassName = "",
   ariaLabel,
 }: {
   label: string;
@@ -33,6 +34,9 @@ export function SplitPill({
   onClick?: () => void;
   type?: "button" | "submit";
   className?: string;
+  // Extra classes for the icon square — e.g. to hide the arrow at a custom
+  // breakpoint (`max-[575px]:hidden`) for a specific call site.
+  iconClassName?: string;
   ariaLabel?: string;
 }) {
   const bg = variant === "red" ? "bg-sfs-red" : "bg-white";
@@ -41,7 +45,7 @@ export function SplitPill({
 
   const square = (
     <span
-      className={`relative z-[1] grid h-[50px] w-[50px] shrink-0 place-items-center rounded-[8px] max-[480px]:h-[40px] max-[480px]:w-[40px] max-[389px]:hidden ${bg} ${fg}`}
+      className={`relative z-[1] grid h-[50px] w-[50px] shrink-0 place-items-center rounded-[8px] max-[480px]:h-[40px] max-[480px]:w-[40px] max-[389px]:hidden ${iconClassName} ${bg} ${fg}`}
     >
       <span
         className={`grid place-items-center transition-transform ${ease} ${

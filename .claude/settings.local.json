@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cd \"D:\\\\SFS Dedicated\" && mkdir -p \"app/[slug]\" && echo done)"
+      "Bash(cd \"D:\\\\SFS Dedicated\" && mkdir -p \"app/[slug]\" && echo done)",
+      "mcp__claude_ai_Figma__get_screenshot"
     ],
     "additionalDirectories": [
       "d:\\SFS Dedicated\\app"

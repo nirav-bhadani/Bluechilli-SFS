@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatIcon } from "./icons";
 
 // Lazy-load the heavy assistant so it never affects initial PageSpeed/LCP.
@@ -11,6 +11,14 @@ const FullScreenAssistant = dynamic(() => import("./FullScreenAssistant"), {
 
 export function FloatingAssistant() {
   const [open, setOpen] = useState(false);
+
+  // Let any CTA on a page without the hero chat card (e.g. About) open the
+  // assistant via a global event (see scrollToChat).
+  useEffect(() => {
+    const openAssistant = () => setOpen(true);
+    window.addEventListener("sfs:open-assistant", openAssistant);
+    return () => window.removeEventListener("sfs:open-assistant", openAssistant);
+  }, []);
 
   return (
     <>
