@@ -63,7 +63,7 @@ export function ReadyToScale() {
           <svg
             aria-hidden
             viewBox="0 0 180 90"
-            className="pointer-events-none absolute left-[40px] top-full h-[60px] w-[120px] min-[1024px]:left-[160px] min-[1024px]:h-[90px] min-[1024px]:w-[180px]"
+            className="pointer-events-none absolute left-[80px] top-full h-[60px] w-[120px] min-[1024px]:h-[90px] min-[1024px]:w-[180px]"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >

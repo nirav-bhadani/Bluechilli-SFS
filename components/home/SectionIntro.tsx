@@ -11,6 +11,7 @@ export function SectionIntro({
   className = "",
   headingMargin = "mt-8",
   introMargin = "mt-6",
+  introClass = "text-[17px] min-[768px]:text-[20px] min-[1024px]:text-[24px] min-[1200px]:text-[30px]",
 }: {
   chip: string;
   heading: string;
@@ -19,6 +20,8 @@ export function SectionIntro({
   // Spacing below the chip / heading — overridable per section.
   headingMargin?: string;
   introMargin?: string;
+  // Intro paragraph size classes — overridable per section.
+  introClass?: string;
 }) {
   return (
     <div className={className}>
@@ -36,7 +39,7 @@ export function SectionIntro({
         <Reveal
           as="p"
           delay={0.1}
-          className={`${introMargin} font-body text-[17px] leading-[1.6] text-black/80 min-[768px]:text-[20px] min-[1024px]:text-[24px] min-[1200px]:text-[30px]`}
+          className={`${introMargin} font-body leading-[1.6] text-black/80 ${introClass}`}
         >
           {children}
         </Reveal>

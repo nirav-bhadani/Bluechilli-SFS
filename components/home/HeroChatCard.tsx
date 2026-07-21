@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, type ComponentType, type SVGProps } from "react";
-import Image from "next/image";
 import { useChat } from "@/components/chat/useChat";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { MessageList } from "@/components/chat/MessageList";
@@ -51,17 +50,17 @@ export function HeroChatCard() {
       data-hero-card
       className="relative mx-auto w-full max-w-[1024px] rounded-[8px] border border-black/10 bg-white/90 shadow-sfs-chat backdrop-blur-[10px] min-[1024px]:h-[592px]"
     >
-      {/* Mascot — overlaps the top edge, horizontally centred (Figma 89:1910). */}
-      <Image
+      {/* Mascot — overlaps the top edge, horizontally centred (Figma 89:1910).
+          Plain <img> so the SVG renders crisply and bypasses the image optimizer
+          (which rejects SVG without dangerouslyAllowSVG). */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         data-hero-mascot
-        src="/figma-assets/hero-mascot.png"
+        src="/figma-assets/chatglobe.svg"
         alt="SFS assistant"
         width={238}
         height={238}
-        priority
-        // The source render has an opaque white backing; fade the edges to
-        // transparent so the sphere floats over both the red panel and the card.
-        className="pointer-events-none absolute left-1/2 top-0 z-10 h-[140px] w-[140px] -translate-x-1/2 -translate-y-[70px] select-none [-webkit-mask-image:radial-gradient(circle,#000_36%,transparent_58%)] [mask-image:radial-gradient(circle,#000_36%,transparent_58%)] min-[1024px]:h-[238px] min-[1024px]:w-[238px] min-[1024px]:-translate-y-[119px]"
+        className="pointer-events-none absolute left-1/2 top-0 z-10 h-[140px] w-[140px] -translate-x-1/2 -translate-y-[70px] select-none min-[1024px]:h-[238px] min-[1024px]:w-[238px] min-[1024px]:-translate-y-[119px]"
       />
 
       <div className="flex h-full flex-col px-[24px] pb-[24px] pt-[86px] min-[1024px]:pt-[139px]">
@@ -155,8 +154,9 @@ function RestingBubbles() {
       {/* Assistant */}
       <div className="flex items-start gap-3">
         <span className="mt-1 grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full">
-          <Image
-            src="/figma-assets/hero-mascot.png"
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/figma-assets/chatglobe.svg"
             alt=""
             width={36}
             height={36}
