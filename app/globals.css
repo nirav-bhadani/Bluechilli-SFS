@@ -365,33 +365,6 @@
       transparent
     );
   }
-  .hero-chip-track {
-    animation: hero-chip-marquee 34s linear infinite;
-    will-change: transform;
-  }
-  @keyframes hero-chip-marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  /* No marquee — let the chips be scrolled manually instead. */
-  .hero-chip-track {
-    animation: none !important;
-    transform: none !important;
-  }
-  .hero-chip-mask {
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .hero-chip-mask::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

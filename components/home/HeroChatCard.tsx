@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, type ComponentType, type SVGProps } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentType,
+  type SVGProps,
+} from "react";
 import { useChat } from "@/components/chat/useChat";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { MessageList } from "@/components/chat/MessageList";
@@ -30,6 +37,52 @@ export function HeroChatCard() {
   const chat = useChat();
   const hasThread = chat.messages.length > 0;
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // The chips no longer auto-scroll: the red rule beneath the thread doubles as
+  // the scrollbar, so the row only moves when the user drags it (or scrolls the
+  // row directly). Thumb width/offset mirror the visible fraction of the track.
+  const chipsRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const dragging = useRef(false);
+  const [thumb, setThumb] = useState({ width: 100, left: 0 });
+
+  const syncThumb = useCallback(() => {
+    const el = chipsRef.current;
+    if (!el) return;
+    const { scrollWidth, clientWidth, scrollLeft } = el;
+    const visible = scrollWidth > 0 ? Math.min(1, clientWidth / scrollWidth) : 1;
+    const max = scrollWidth - clientWidth;
+    setThumb({
+      width: visible * 100,
+      left: max > 0 ? (scrollLeft / max) * (100 - visible * 100) : 0,
+    });
+  }, []);
+
+  useEffect(() => {
+    syncThumb();
+    const el = chipsRef.current;
+    const ro =
+      el && typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(syncThumb)
+        : null;
+    if (el) ro?.observe(el);
+    window.addEventListener("resize", syncThumb);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("resize", syncThumb);
+    };
+  }, [syncThumb]);
+
+  // Map a pointer x on the bar to a scroll position on the chip row.
+  const seek = (clientX: number) => {
+    const bar = barRef.current;
+    const el = chipsRef.current;
+    if (!bar || !el) return;
+    const r = bar.getBoundingClientRect();
+    if (r.width <= 0) return;
+    const pct = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
+    el.scrollLeft = pct * (el.scrollWidth - el.clientWidth);
+  };
 
   // Keep the newest message in view while streaming.
   useEffect(() => {
@@ -83,18 +136,63 @@ export function HeroChatCard() {
           )}
         </div>
 
-        {/* Red rule ("squiggle") above the chips — Figma 89:2018 (200×2). */}
-        <div aria-hidden className="mt-4 h-[2px] w-[200px] max-w-full bg-sfs-red" />
+        {/* Red rule — Figma 89:2018 (200×2), now the draggable scrollbar for the
+            chips. Padding widens the grab area without moving the 2px rule. */}
+        <div
+          ref={barRef}
+          role="scrollbar"
+          aria-label="Scroll suggestions"
+          aria-controls="hero-chips"
+          aria-orientation="horizontal"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(thumb.left)}
+          tabIndex={0}
+          onPointerDown={(e) => {
+            dragging.current = true;
+            e.currentTarget.setPointerCapture(e.pointerId);
+            seek(e.clientX);
+          }}
+          onPointerMove={(e) => {
+            if (dragging.current) seek(e.clientX);
+          }}
+          onPointerUp={(e) => {
+            dragging.current = false;
+            e.currentTarget.releasePointerCapture(e.pointerId);
+          }}
+          onPointerCancel={() => {
+            dragging.current = false;
+          }}
+          onKeyDown={(e) => {
+            const el = chipsRef.current;
+            if (!el) return;
+            if (e.key === "ArrowRight") el.scrollLeft += 160;
+            else if (e.key === "ArrowLeft") el.scrollLeft -= 160;
+          }}
+          className="mb-[-8px] mt-[8px] w-[200px] max-w-full cursor-grab touch-none py-2 outline-none active:cursor-grabbing"
+        >
+          <div className="h-[2px] w-full rounded-full bg-sfs-red/25">
+            <div
+              className="h-full rounded-full bg-sfs-red"
+              style={{ width: `${thumb.width}%`, marginLeft: `${thumb.left}%` }}
+            />
+          </div>
+        </div>
 
-        {/* Suggestion chips — auto-scrolling marquee with faded edges. */}
-        <div className="hero-chip-mask group relative mt-3 overflow-hidden">
-          <div className="hero-chip-track flex w-max gap-3 group-hover:[animation-play-state:paused]">
-            {[...CHIPS, ...CHIPS].map((chip, i) => (
+        {/* Suggestion chips — scrolled by the bar above (or directly), never
+            auto-rotating. Faded edges via .hero-chip-mask. */}
+        <div
+          id="hero-chips"
+          ref={chipsRef}
+          onScroll={syncThumb}
+          className="hero-chip-mask mt-3 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          <div className="flex w-max gap-3">
+            {CHIPS.map((chip) => (
               <ChipButton
-                key={`${chip.label}-${i}`}
+                key={chip.label}
                 chip={chip}
                 onClick={() => void chat.send(chip.label)}
-                aria-hidden={i >= CHIPS.length}
               />
             ))}
           </div>
