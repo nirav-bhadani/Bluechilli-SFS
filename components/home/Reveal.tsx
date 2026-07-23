@@ -8,6 +8,15 @@ import {
 } from "react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "./anim";
 
+// A trigger whose start sits past the maximum scroll can never fire, so its
+// element would stay at opacity 0 forever — that is what left the footer (and
+// anything else close to the page bottom) invisible on tall viewports. Play
+// those straight away instead. Wired to `onRefresh`, so it is re-evaluated on
+// resize and after late-loading images change the page height.
+export function revealIfUnreachable(self: { start: number; animation?: gsap.core.Animation }) {
+  if (self.start > ScrollTrigger.maxScroll(window) - 1) self.animation?.play();
+}
+
 // Global section-reveal primitive (Animation spec 5): fade up 40px on the
 // `cubic-bezier(0.22,1,0.36,1)` curve as the element enters the viewport, once.
 // Collapses to a static, fully-visible state under prefers-reduced-motion.
@@ -58,7 +67,7 @@ export function Reveal({
         delay,
         ease: "power3.out",
         force3D: true,
-        scrollTrigger: { trigger: el, start, once: true },
+        scrollTrigger: { trigger: el, start, once: true, onRefresh: revealIfUnreachable },
       });
     });
     return () => ctx.revert();
@@ -134,7 +143,7 @@ export function RevealGroup({
             duration,
             ease,
             force3D: true,
-            scrollTrigger: { trigger: el, start, once: true },
+            scrollTrigger: { trigger: el, start, once: true, onRefresh: revealIfUnreachable },
           });
         });
       } else {
@@ -147,7 +156,7 @@ export function RevealGroup({
           stagger,
           // GPU-friendly: promote to its own layer during the tween only.
           force3D: true,
-          scrollTrigger: { trigger: root, start, once: true },
+          scrollTrigger: { trigger: root, start, once: true, onRefresh: revealIfUnreachable },
         });
       }
     }, root);
@@ -192,7 +201,7 @@ export function LineReveal({
         duration: 0.9,
         ease: "power3.out",
         force3D: true,
-        scrollTrigger: { trigger: el, start, once: true },
+        scrollTrigger: { trigger: el, start, once: true, onRefresh: revealIfUnreachable },
       });
     });
     return () => ctx.revert();
@@ -239,7 +248,7 @@ export function CountUp({
         onUpdate: () => {
           el.textContent = format(obj.n);
         },
-        scrollTrigger: { trigger: el, start: "top 90%", once: true },
+        scrollTrigger: { trigger: el, start: "top 90%", once: true, onRefresh: revealIfUnreachable },
       });
     });
     return () => ctx.revert();
