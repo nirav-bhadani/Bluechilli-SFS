@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPage, pages } from "@/lib/pages";
+import { getPage, isReservedPath, pages } from "@/lib/pages";
 import { InnerPage } from "@/components/InnerPage";
 
 export function generateStaticParams() {
-  return Object.keys(pages).map((slug) => ({ slug }));
+  return Object.keys(pages)
+    .filter((slug) => !slug.includes("/") && !isReservedPath(slug))
+    .map((slug) => ({ slug }));
 }
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {

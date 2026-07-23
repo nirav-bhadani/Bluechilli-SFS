@@ -508,6 +508,17 @@ export const pages: Record<string, PageContent> = {
   },
 };
 
+// Paths that now have their own purpose-built route (app/<path>/page.tsx). The
+// generic [slug] / [...slug] routes must not pre-render or serve these — two
+// pages resolving to one URL is ambiguous, and the old InnerPage version can
+// shadow the real page in a production build.
+export const RESERVED_PATHS = new Set(["about-us", "services", "warehouse-storage"]);
+
+export function isReservedPath(slug: string): boolean {
+  return RESERVED_PATHS.has(slug);
+}
+
 export function getPage(slug: string): PageContent | undefined {
+  if (isReservedPath(slug)) return undefined;
   return pages[slug];
 }

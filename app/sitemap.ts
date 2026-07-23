@@ -20,5 +20,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: page.legal ? 0.3 : page.children ? 0.8 : 0.6,
   }));
 
-  return [home, ...inner];
+  // Purpose-built routes that don't live in the pages content map.
+  const standalone = ["warehouse-storage"].map((slug) => ({
+    url: `${base}/${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  return [home, ...inner, ...standalone];
 }
