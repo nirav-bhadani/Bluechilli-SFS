@@ -1,5 +1,9 @@
+"use client";
+
+import { useLayoutEffect, useRef } from "react";
 import { SectionChip } from "@/components/home/SectionChip";
-import { Reveal, RevealGroup } from "@/components/home/Reveal";
+import { Reveal, revealIfUnreachable } from "@/components/home/Reveal";
+import { gsap, prefersReducedMotion } from "@/components/home/anim";
 
 type Fact = {
   value: string;
@@ -48,6 +52,51 @@ const FACTS: Fact[] = [
 // Section 3.2 — Key Facts & Capabilities. A centred intro, then five red stat
 // cards staggered left/right over a subtle grey spine (Figma 139:103).
 export function KeyFacts() {
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // Each card opens outward from the central spine: a clip-path wipe anchored to
+  // the card's centre-facing edge, so it appears to grow out of the middle. A
+  // clip (rather than scaleX) keeps the numbers and copy undistorted.
+  useLayoutEffect(() => {
+    const root = listRef.current;
+    if (!root) return;
+    const cards = gsap.utils.toArray<HTMLElement>("[data-fact]", root);
+    if (!cards.length) return;
+
+    if (prefersReducedMotion()) {
+      gsap.set(cards, { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, x: 0 });
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      cards.forEach((card) => {
+        const openRight = card.dataset.side === "right";
+        gsap.set(card, {
+          opacity: 0,
+          x: openRight ? -28 : 28,
+          // Collapsed against the edge nearest the centre.
+          clipPath: openRight ? "inset(0% 100% 0% 0%)" : "inset(0% 0% 0% 100%)",
+        });
+        gsap.to(card, {
+          opacity: 1,
+          x: 0,
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 0.9,
+          ease: "power3.out",
+          force3D: true,
+          scrollTrigger: {
+            trigger: card,
+            start: "top 82%",
+            once: true,
+            onRefresh: revealIfUnreachable,
+          },
+        });
+      });
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section className="bg-white px-6 pb-[90px] pt-[80px] min-[768px]:px-10 min-[1024px]:pb-[120px] min-[1024px]:pt-[150px]">
       <div className="mx-auto max-w-[90vw] min-[1400px]:max-w-[1320px] min-[1600px]:max-w-[1548px]">
@@ -81,19 +130,20 @@ export function KeyFacts() {
             aria-hidden
             className="pointer-events-none absolute left-1/2 top-6 h-[calc(100%-48px)] w-[92%] max-w-none -translate-x-1/2 rounded-[10px] bg-sfs-panel min-[1024px]:w-[548px] min-[1024px]:max-w-[40%]"
           />
-          <RevealGroup perItem y={30} scaleFrom={0.98} className="relative flex flex-col gap-6">
+          <div ref={listRef} className="relative flex flex-col gap-6">
             {FACTS.map((f) => (
               <div
                 key={f.value}
-                data-reveal-item
-                className={`w-[85%] min-[1024px]:w-[66.15%] ${
+                data-fact
+                data-side={f.side}
+                className={`w-[85%] will-change-[clip-path,transform] min-[1024px]:w-[66.15%] ${
                   f.side === "right" ? "ml-auto" : "mr-auto"
                 }`}
               >
                 <FactCard {...f} />
               </div>
             ))}
-          </RevealGroup>
+          </div>
         </div>
       </div>
     </section>
