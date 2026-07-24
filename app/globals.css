@@ -347,24 +347,6 @@
     text-wrap: pretty;
   }
 
-  /* Hero suggestion-chip marquee (Animation spec 9): a seamless auto-scroll of
-     two chip copies with faded edges, pausing on hover (handled in markup). */
-  .hero-chip-mask {
-    -webkit-mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 6%,
-      #000 94%,
-      transparent
-    );
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 6%,
-      #000 94%,
-      transparent
-    );
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

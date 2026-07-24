@@ -73,6 +73,47 @@ export function HeroChatCard() {
     };
   }, [syncThumb]);
 
+  // Drag the chip row itself. Mouse only — touch and pen keep the browser's
+  // native (momentum) scrolling, which would otherwise fight a manual drag.
+  const rowDrag = useRef({ active: false, startX: 0, startLeft: 0, moved: false });
+
+  const onRowPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return;
+    const el = chipsRef.current;
+    if (!el) return;
+    rowDrag.current = { active: true, startX: e.clientX, startLeft: el.scrollLeft, moved: false };
+  };
+
+  const onRowPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = chipsRef.current;
+    if (!rowDrag.current.active || !el) return;
+    const dx = e.clientX - rowDrag.current.startX;
+    // Only treat it as a drag past a small threshold, so a normal click still
+    // sends the prompt.
+    if (Math.abs(dx) > 4) {
+      rowDrag.current.moved = true;
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+    el.scrollLeft = rowDrag.current.startLeft - dx;
+  };
+
+  const endRowDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    rowDrag.current.active = false;
+  };
+
+  // Swallow the click that follows a drag so releasing over a chip does not
+  // fire it. Reset afterwards for the next interaction.
+  const onRowClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (rowDrag.current.moved) {
+      e.preventDefault();
+      e.stopPropagation();
+      rowDrag.current.moved = false;
+    }
+  };
+
   // Map a pointer x on the bar to a scroll position on the chip row.
   const seek = (clientX: number) => {
     const bar = barRef.current;
@@ -179,13 +220,18 @@ export function HeroChatCard() {
           </div>
         </div>
 
-        {/* Suggestion chips — scrolled by the bar above (or directly), never
-            auto-rotating. Faded edges via .hero-chip-mask. */}
+        {/* Suggestion chips — never auto-rotating. Drag the row directly, or use
+            the bar above. */}
         <div
           id="hero-chips"
           ref={chipsRef}
           onScroll={syncThumb}
-          className="hero-chip-mask mt-3 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          onPointerDown={onRowPointerDown}
+          onPointerMove={onRowPointerMove}
+          onPointerUp={endRowDrag}
+          onPointerCancel={endRowDrag}
+          onClickCapture={onRowClickCapture}
+          className="mt-3 cursor-grab select-none overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
         >
           <div className="flex w-max gap-3">
             {CHIPS.map((chip) => (
