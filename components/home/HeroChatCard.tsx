@@ -150,7 +150,7 @@ export function HeroChatCard() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         data-hero-mascot
-        src="/figma-assets/chatglobe.svg"
+        src="/figma-assets/ai-symbol.svg"
         alt="SFS assistant"
         width={238}
         height={238}
@@ -300,7 +300,7 @@ function RestingBubbles() {
         <span className="mt-1 grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/figma-assets/chatglobe.svg"
+            src="/figma-assets/ai-symbol.svg"
             alt=""
             width={36}
             height={36}
